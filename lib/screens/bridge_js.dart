@@ -15,6 +15,7 @@ class BridgeJs extends StatefulWidget {
 class _BridgeJsState extends State<BridgeJs> {
   var _url;
   bool isLoading = true;
+
   _BridgeJsState(this._url);
 
   @override
@@ -26,30 +27,47 @@ class _BridgeJsState extends State<BridgeJs> {
           body: SafeArea(
             child: Stack(
               children: [
+                isLoading
+                    ? Container()
+                    : Expanded(
+                        child: WebView(
+                            javascriptMode: JavascriptMode.unrestricted,
+                            initialUrl: _url,
+                            onWebViewCreated:
+                                (WebViewController webViewController) {
+                              webViewController
+                                  .evaluateJavascript('alert("Hello")');
+                            })),
+
                 Visibility(
                   visible: true,
                   child: Expanded(
                       child: WebView(
-                          javascriptMode: JavascriptMode.unrestricted,
-                          initialUrl: _url,
-                          onPageFinished: (String url){
-                            setState((){
-                              isLoading = false;
-                            });
-                          },
-                      )),
+                    javascriptMode: JavascriptMode.unrestricted,
+                    initialUrl: _url,
+                    onPageFinished: (String url) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
+                  )),
                 ),
-                isLoading ? Scaffold(
-                  body: Center(
-                    child: CircularProgressIndicator(
-                      valueColor: new AlwaysStoppedAnimation<Color>(
-                          Colors.red),
-                    ),
-                  ),
-                  backgroundColor: Colors.red.withOpacity(0.2))
-                : Container(
-                  child: Center(child: Text("Load completed", style: TextStyle(fontSize: 20, color: Colors.red))),
-                )
+
+                isLoading
+                    ? Scaffold(
+                        body: Center(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                new AlwaysStoppedAnimation<Color>(Colors.red),
+                          ),
+                        ),
+                        backgroundColor: Colors.red.withOpacity(0.2))
+                    : Container(
+                        child: Center(
+                            child: Text("Load completed",
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.red))),
+                      )
               ],
             ),
           ),
