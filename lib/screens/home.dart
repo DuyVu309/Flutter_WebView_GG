@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'bridge_js.dart';
 import 'web_view_container.dart';
 
 class Home extends StatelessWidget {
-  static final links = ['https://google.com'];
+  static const start = '';
+  static final links = ['${start}https://google.com'];
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,6 @@ class Home extends StatelessWidget {
 
   void _handleURLButtonPress(BuildContext context, String url) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => WebViewContainer(url)));
+        MaterialPageRoute(builder: (context) => BridgeJs(url)));
   }
 }
